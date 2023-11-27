@@ -44,15 +44,17 @@ const Map = () => {
     }
 
     const [bicycleSpots, setBicycleSpots] = useState([])
+    const [parkingSpots, setParkingSpots] = useState([])
 
 
     useEffect(() => {
         fetch('http://localhost:8080/bicyclespots')
             .then(res => res.json())
             .then(spotData => setBicycleSpots(spotData))
+        fetch('http://localhost:8080/parkingspots')
+            .then(res => res.json())
+            .then(parkingSpotData => setParkingSpots(parkingSpotData))
     }, [])
-
-
 
     const bicycleItems = bicycleSpots.map((spot) => (
         <Marker
@@ -62,18 +64,6 @@ const Map = () => {
             pinColor='blue'
         />
     ))
-
-
-    const [parkingSpots, setParkingSpots] = useState([])
-
-
-    useEffect(() => {
-        fetch('http://localhost:8080/parkingspots')
-            .then(res => res.json())
-            .then(parkingSpotData => setParkingSpots(parkingSpotData))
-    }, [])
-
-
 
     const parkingSpotItems = parkingSpots.map((parkingSpot) => (
         <Marker
