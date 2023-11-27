@@ -32,6 +32,7 @@ import ZoneB7 from '../Zones/ZoneB7';
 import ZoneB8 from '../Zones/ZoneB8';
 import ZoneB10 from '../Zones/ZoneB10';
 import ZoneB9 from '../Zones/ZoneB9';
+import LocationSearch from '../SearchBar/LocationSearch';
 
 const Map = () => {
 
@@ -71,6 +72,7 @@ const Map = () => {
                 region={initialRegion}
                 radius={200}
                 >
+                <LocationSearch />
                 <Zone1 />
                 <Zone1A />
                 <Zone2 />
