@@ -59,8 +59,30 @@ const Map = () => {
             key={spot.council_identifier}
             coordinate={{ latitude: spot.latitude, longitude: spot.longitude }}
             title={`Capacity: ${spot.capacity}`}
+            pinColor='blue'
         />
     ))
+
+
+    const [parkingSpots, setParkingSpots] = useState([])
+
+
+    useEffect(() => {
+        fetch('http://localhost:8080/parkingspots')
+            .then(res => res.json())
+            .then(parkingSpotData => setParkingSpots(parkingSpotData))
+    }, [])
+
+
+
+    const parkingSpotItems = parkingSpots.map((parkingSpot) => (
+        <Marker
+            key={parkingSpot.councilBayIdentifier}
+            coordinate={{ latitude: parkingSpot.defaultLatitude, longitude: parkingSpot.defaultLongitude }}
+            title={`Bay type: ${parkingSpot.bayType}`}
+        />
+    ))
+
 
 // ToDo: We can set showUserLocation on MapView and we need to look into react-native-permissions
     return (
@@ -103,6 +125,7 @@ const Map = () => {
                 <ZoneB9 />
                 <ZoneB10 />
                 {bicycleItems}
+                {parkingSpotItems}
             </MapView>
         </View>
     )
