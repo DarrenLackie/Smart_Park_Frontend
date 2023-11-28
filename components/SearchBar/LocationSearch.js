@@ -1,4 +1,5 @@
-import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
+import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete"; 
+import { StyleSheet, useWindowDimensions } from "react-native";
 import APIKEY from '../../secrets'
 
 const LocationSearch = ({ onSelectLocation }) => {
@@ -31,6 +32,8 @@ const LocationSearch = ({ onSelectLocation }) => {
             fetchDetails={true}
             returnKeyType={"search"}
             enablePoweredByContainer={false}
+
+            // style={[styles.textInput, styles.textInputContainer]}
             styles={{
                 textInputContainer: {
                     backgroundColor: 'rgba(0,0,0,0)',
@@ -38,15 +41,17 @@ const LocationSearch = ({ onSelectLocation }) => {
                     borderBottomWidth: 0,
                 },
                 textInput: {
-                    marginLeft: 10,
-                    marginRight: 10,
-                    marginTop: 50,
+                    marginLeft: 20,
+                    marginRight: 20,
+                    marginTop: 70,
                     height: 50,
-                    color: '#5d5d5d',
+                    color: '#000',
                     fontSize: 16,
+                    // position: "absolute",
+                    // marginBottom: useWindowDimensions - 40,
                 },
                 predefinedPlacesDescription: {
-                    color: '#1faadb',
+                    color: '#000',
                 }
             }}
         />

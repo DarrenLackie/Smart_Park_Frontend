@@ -1,10 +1,11 @@
 import { StyleSheet } from "react-native";
 
+//this won't fucking work for some unknown reason
 const styles = StyleSheet.create({
     textInputContainer: {
         backgroundColor: 'rgba(0,0,0,0',
         borderTopWidth: 0,
-        borderBottomWidth: 0
+        borderBottomWidth: 0,
     },
     textInput: {
         marginLeft: 50,

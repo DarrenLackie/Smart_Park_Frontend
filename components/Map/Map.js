@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text } from 'react-native';
-import { PROVIDER_GOOGLE, Marker, Polygon } from 'react-native-maps';
+import { PROVIDER_GOOGLE, Marker, Polygon, Callout, CalloutSubview } from 'react-native-maps';
 import styles from './styles';
 import MapView from 'react-native-map-clustering';
 import Zone1 from '../Zones/Zone1';
@@ -74,8 +74,9 @@ const Map = () => {
         <Marker
             key={spot.council_identifier}
             coordinate={{ latitude: spot.latitude, longitude: spot.longitude }}
-            title={`Capacity: ${spot.capacity}`}
+            title={`${spot.capacity} bicycle spots`}
             pinColor='blue'
+            // image={require 'path'}
         />
     ))
 
@@ -83,20 +84,26 @@ const Map = () => {
         <Marker
             key={parkingSpot.councilBayIdentifier}
             coordinate={{ latitude: parkingSpot.defaultLatitude, longitude: parkingSpot.defaultLongitude }}
-            title={`Bay type: ${parkingSpot.bayType}`}
-        />
+            ><Callout >
+                <Text style={styles.text}>{`Price: ${parkingSpot.parkingZone}`}</Text>
+                <Text style={styles.text}>See restictions</Text>
+            </Callout>
+        </Marker>
+        
     ))
 
     // ToDo: We can set showUserLocation on MapView and we need to look into react-native-permissions
+    
     return (
         <View style={styles.container}>
             <MapView
                 style={styles.map}
                 provider={PROVIDER_GOOGLE}
-                minPoints={2}
+
+                minPoints={4}
                 region={region}
-                radius={200}
-            >
+                radius={100}
+
                 <LocationSearch onSelectLocation={handleLocationSelect} />
                 <Zone1 />
                 <Zone1A />
@@ -129,9 +136,24 @@ const Map = () => {
                 <ZoneB10 />
                 {bicycleItems}
                 {parkingSpotItems}
+                {/* {parkingSpotCallout} */}
+                {/* <Callout tooltip style={styles.callout}>
+                    <View>
+                        <Text>Testing testing</Text>
+                    </View>
+                </Callout> */}
             </MapView>
         </View>
     )
 }
+
+// const styles = StyleSheet.create({
+//     bicyclePin: {
+//         pinColor: 'green'
+//     },
+//     carPin: {
+//         pinColor: 'orange'
+//     },
+// })
 
 export default Map;
