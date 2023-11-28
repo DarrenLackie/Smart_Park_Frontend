@@ -34,14 +34,14 @@ import ZoneB10 from '../Zones/ZoneB10';
 import ZoneB9 from '../Zones/ZoneB9';
 import LocationSearch from '../SearchBar/LocationSearch';
 import ResetMapButton from '../ResetButton/ResetMapButton';
+import * as Location from 'expo-location'
 
-
-const Map = () => {
+const Map = ({userLocation}) => {
     const mapRef = useRef(null);
 
     const initialRegion = {
-        latitude: 55.9533,
-        longitude: -3.1883,
+        latitude: userLocation?.coords.latitude || 55.9533,
+        longitude: userLocation?.coords.longitude || -3.1883,
         latitudeDelta: 0.0922,
         longitudeDelta: 0.0421
     }
@@ -49,6 +49,14 @@ const Map = () => {
     const [bicycleSpots, setBicycleSpots] = useState([])
     const [parkingSpots, setParkingSpots] = useState([])
     const [region, setRegion] = useState(initialRegion)
+    const [currentLocation, setCurrentLocation] = useState({})
+
+
+    useEffect(() => {
+        setCurrentLocation(userLocation)
+    }, [userLocation])
+    console.log(currentLocation)
+
 // TODO: use promise.all here ;)
     useEffect(() => {
         fetch('http://localhost:8080/bicyclespots')
@@ -87,7 +95,7 @@ const Map = () => {
 
     useEffect(() => {
         handleResetMap();
-    }, []);
+    }, [userLocation]);
 
 
     const handleLocationSelect = (selectedRegion) => {
@@ -105,21 +113,21 @@ const Map = () => {
     }
 
     const handleResetMap = () => {
-        console.log("regionsta", initialRegion);
+        // console.log("regionsta", initialRegion);
         setRegion(initialRegion);
         mapRef.current.animateToRegion(initialRegion, 0.5 * 1000);
 
     };
 
     const handleRegionChange = (newRegion) => {
-        console.log("handleRegionChange!!!",newRegion);
+        // console.log("handleRegionChange!!!",newRegion);
         if (!region) {
             setRegionToThis = newRegion
         } else {
-            // console.log("FINISHED moved!");
-            hasMovedLati = Math.abs(newRegion.latitude - region.latitude)
-            hasMovedLong = Math.abs(newRegion.longitude - region.longitude)
-            if ((hasMovedLati > 0.1 || hasMovedLong > 0.1)) {
+            // console.log("FINISHED moving!");
+            hasMovedLatitude = Math.abs(newRegion.latitude - region.latitude)
+            hasMovedLongitude = Math.abs(newRegion.longitude - region.longitude)
+            if ((hasMovedLatitude > 0.1 || hasMovedLongitude > 0.1)) {
                 setRegionToThis = newRegion
             } else {
                 return 
@@ -135,13 +143,22 @@ const Map = () => {
             <MapView
                 style={styles.map}
                 provider={PROVIDER_GOOGLE}
-                minPoints={4}
                 ref={mapRef}
                 initialRegion={initialRegion}
                 onRegionChangeComplete={handleRegionChange}
                 radius={200}
             >
                 <LocationSearch onSelectLocation={handleLocationSelect} />
+                {currentLocation && currentLocation.coords && (
+                    <Marker 
+                        coordinate={{
+                            latitude: currentLocation.coords.latitude,
+                            longitude: currentLocation.coords.longitude
+                        }}
+                        title="Your Location"
+                        description='This is where you are mate'
+                    />
+                )}
                 <Zone1 />
                 <Zone1A />
                 <Zone2 />
