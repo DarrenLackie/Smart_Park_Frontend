@@ -99,10 +99,10 @@ const Map = () => {
             <MapView
                 style={styles.map}
                 provider={PROVIDER_GOOGLE}
-
                 minPoints={4}
                 region={region}
                 radius={100}
+                >
 
                 <LocationSearch onSelectLocation={handleLocationSelect} />
                 <Zone1 />
@@ -136,24 +136,10 @@ const Map = () => {
                 <ZoneB10 />
                 {bicycleItems}
                 {parkingSpotItems}
-                {/* {parkingSpotCallout} */}
-                {/* <Callout tooltip style={styles.callout}>
-                    <View>
-                        <Text>Testing testing</Text>
-                    </View>
-                </Callout> */}
             </MapView>
         </View>
     )
 }
 
-// const styles = StyleSheet.create({
-//     bicyclePin: {
-//         pinColor: 'green'
-//     },
-//     carPin: {
-//         pinColor: 'orange'
-//     },
-// })
 
 export default Map;
