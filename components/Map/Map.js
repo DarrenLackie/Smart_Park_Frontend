@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { View, Text } from 'react-native';
-import { PROVIDER_GOOGLE, Marker, Polygon } from 'react-native-maps';
+import { PROVIDER_GOOGLE, Marker, Polygon, Callout, CalloutSubview } from 'react-native-maps';
 import styles from './styles';
 import MapView from 'react-native-map-clustering';
 import Zone1 from '../Zones/Zone1';
@@ -115,8 +115,9 @@ const Map = () => {
         <Marker
             key={spot.council_identifier}
             coordinate={{ latitude: spot.latitude, longitude: spot.longitude }}
-            title={`Capacity: ${spot.capacity}`}
+            title={`${spot.capacity} bicycle spots`}
             pinColor='blue'
+            // image={require 'path'}
         />
     ))
 
@@ -124,25 +125,30 @@ const Map = () => {
         <Marker
             key={parkingSpot.councilBayIdentifier}
             coordinate={{ latitude: parkingSpot.defaultLatitude, longitude: parkingSpot.defaultLongitude }}
-            title={`Bay type: ${parkingSpot.bayType}`}
-        />
+            ><Callout >
+                <Text style={styles.text}>{`Price: ${parkingSpot.parkingZone}`}</Text>
+                <Text style={styles.text}>See restictions</Text>
+            </Callout>
+        </Marker>
+        
     ))
 
     // ToDo: We can set showUserLocation on MapView and we need to look into react-native-permissions
+    
     return (
         <View style={styles.container}>
             <MapView
                 style={styles.map}
                 provider={PROVIDER_GOOGLE}
-                minPoints={2}
+                minPoints={4}
                 ref={mapRef}
                 initialRegion={initialRegion}
                 onRegionChangeComplete={handleRegionChange}
                 onRegionChange={handleRegionChangePartial}
-                radius={200}
+                radius={100}
             >
                 <LocationSearch onSelectLocation={handleLocationSelect} />
-                {/* <Zone1 />
+                <Zone1 />
                 <Zone1A />
                 <Zone2 />
                 <Zone3 />
@@ -156,27 +162,28 @@ const Map = () => {
                 <ZoneN2 />
                 <ZoneN3 />
                 <ZoneN4 />
-                // <ZoneN5 />
-                // <ZoneS1 />
-                // <ZoneS2 />
-                // <ZoneS3 />
-                // <ZoneS4 />
-                // <ZoneB1 />
-                // <ZoneB2 />
-                // <ZoneB3 />
-                // <ZoneB4 />
-                // <ZoneB5 />
-                // <ZoneB6 />
-                // <ZoneB7 />
-                // <ZoneB8 />
-                // <ZoneB9 />
-                // <ZoneB10 /> */}
-                {/* {bicycleItems} */}
-                {/* // {parkingSpotItems} */}
+                <ZoneN5 />
+                <ZoneS1 />
+                <ZoneS2 />
+                <ZoneS3 />
+                <ZoneS4 />
+                <ZoneB1 />
+                <ZoneB2 />
+                <ZoneB3 />
+                <ZoneB4 />
+                <ZoneB5 />
+                <ZoneB6 />
+                <ZoneB7 />
+                <ZoneB8 />
+                <ZoneB9 />
+                <ZoneB10 />
+                {bicycleItems}
+                {parkingSpotItems}
             </MapView>
             <ResetMapButton onResetMap={handleResetMap} />
         </View>
     )
 }
+
 
 export default Map;
