@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { View, Text } from 'react-native';
 import { PROVIDER_GOOGLE, Marker, Polygon, Callout, CalloutSubview } from 'react-native-maps';
 import styles from './styles';
@@ -33,14 +33,19 @@ import ZoneB8 from '../Zones/ZoneB8';
 import ZoneB10 from '../Zones/ZoneB10';
 import ZoneB9 from '../Zones/ZoneB9';
 import LocationSearch from '../SearchBar/LocationSearch';
+import ResetMapButton from '../ResetButton/ResetMapButton';
+
+
+
 
 const Map = () => {
+    const mapRef = useRef(null);
 
     const initialRegion = {
-        latitude: 55.9533,
-        longitude: -3.1883,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421
+        latitude: 55.953300000000000,
+        longitude: -3.188300000000000,
+        latitudeDelta: 0.092200000000000,
+        longitudeDelta: 0.042100000000000
     }
 
     const [bicycleSpots, setBicycleSpots] = useState([])
@@ -56,12 +61,18 @@ const Map = () => {
             .then(parkingSpotData => setParkingSpots(parkingSpotData))
     }, [])
 
+    useEffect(() => {
+        handleResetMap();
+    }, []);
+
+
+
     const handleLocationSelect = (selectedRegion) => {
 
         const aspectRatio = 1
         const latDelta = 0.01
         const lngDelta = latDelta * aspectRatio;
-
+        // TODO: fix 
         const newRegion = {
             ...selectedRegion,
             latitudeDelta: latDelta,
@@ -69,6 +80,36 @@ const Map = () => {
         }
         setRegion(selectedRegion)
     }
+
+    const handleResetMap = () => {
+        console.log("regionnow", region);
+        console.log("regionsta", initialRegion);
+        setRegion(initialRegion);
+        mapRef.current.animateToRegion(initialRegion, 0.5 * 1000);
+
+    };
+
+    const handleRegionChange = (newRegion) => {
+        console.log("handleRegionChange!!!",newRegion);
+        if (!region) {
+            setRegionToThis = newRegion;
+        } else {
+            console.log("FINISHED moved!");
+            hasMovedLati = Math.abs(newRegion.latitude - region.latitude);
+            hasMovedLong = Math.abs(newRegion.longitude - region.longitude);
+            if ((hasMovedLati > 0.1 || hasMovedLong > 0.1)) {
+                setRegionToThis = newRegion;
+            }else{
+                setRegionToThis = region;
+            }
+        }
+        setRegion(setRegionToThis);
+    }
+    const handleRegionChangePartial = (newRegion) => {
+        console.log("moved!");
+    }
+
+
 
     const bicycleItems = bicycleSpots.map((spot) => (
         <Marker
@@ -100,10 +141,12 @@ const Map = () => {
                 style={styles.map}
                 provider={PROVIDER_GOOGLE}
                 minPoints={4}
-                region={region}
+                ref={mapRef}
+                initialRegion={initialRegion}
+                onRegionChangeComplete={handleRegionChange}
+                onRegionChange={handleRegionChangePartial}
                 radius={100}
-                >
-
+            >
                 <LocationSearch onSelectLocation={handleLocationSelect} />
                 <Zone1 />
                 <Zone1A />
@@ -137,6 +180,7 @@ const Map = () => {
                 {bicycleItems}
                 {parkingSpotItems}
             </MapView>
+            <ResetMapButton onResetMap={handleResetMap} />
         </View>
     )
 }
