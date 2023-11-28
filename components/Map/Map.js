@@ -45,7 +45,7 @@ const Map = () => {
 
     const [bicycleSpots, setBicycleSpots] = useState([])
     const [parkingSpots, setParkingSpots] = useState([])
-
+    const [region, setRegion] = useState(initialRegion)
 
     useEffect(() => {
         fetch('http://localhost:8080/bicyclespots')
@@ -55,6 +55,20 @@ const Map = () => {
             .then(res => res.json())
             .then(parkingSpotData => setParkingSpots(parkingSpotData))
     }, [])
+
+    const handleLocationSelect = (selectedRegion) => {
+
+        const aspectRatio = 1
+        const latDelta = 0.01
+        const lngDelta = latDelta * aspectRatio;
+
+        const newRegion = {
+            ...selectedRegion,
+            latitudeDelta: latDelta,
+            longitudeDelta: lngDelta
+        }
+        setRegion(selectedRegion)
+    }
 
     const bicycleItems = bicycleSpots.map((spot) => (
         <Marker
@@ -78,24 +92,19 @@ const Map = () => {
         
     ))
 
-    //style={styles.callout}
-
-    // title={`Price: ${parkingSpot.parkingZone}`}
-    // <Callout><Text>{parkingSpot.parkingZone}</Text></Callout> 
-
-
-
-// ToDo: We can set showUserLocation on MapView and we need to look into react-native-permissions
+    // ToDo: We can set showUserLocation on MapView and we need to look into react-native-permissions
+    
     return (
         <View style={styles.container}>
             <MapView
                 style={styles.map}
                 provider={PROVIDER_GOOGLE}
+
                 minPoints={4}
-                region={initialRegion}
+                region={region}
                 radius={100}
-                >
-                <LocationSearch />
+
+                <LocationSearch onSelectLocation={handleLocationSelect} />
                 <Zone1 />
                 <Zone1A />
                 <Zone2 />
