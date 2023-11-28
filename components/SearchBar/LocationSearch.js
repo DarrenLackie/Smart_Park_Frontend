@@ -1,40 +1,42 @@
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
-import APIKEY from '../../secrets'  
-// import { StyleSheet } from "react-native";
+import APIKEY from '../../secrets'
 
-// const styles = StyleSheet.create({
-//     container: {
-//         padding: 10,
-//         height:'100%'
-//     },
-//     textInput: {
-//         marginLeft: 10,
-//         marginRight: 10,
-//         marginTop: 50,
-//         height: 50,
-//         color: '#5d5d5d',
-//         fontSize: 16,
-//     },
-// })
+const LocationSearch = ({ onSelectLocation }) => {
 
-const LocationSearch = () => {
+    const handlePlaceSelection = (data, details = null) => {
+
+        const { lat, lng } = details.geometry.location
+        const latDelta = 0.008;
+        const lngDelta = latDelta
+
+        const selectedLocation = {
+            latitude: lat,
+            longitude: lng,
+            latitudeDelta: latDelta,
+            longitudeDelta: lngDelta,
+        };
+        onSelectLocation(selectedLocation)
+    }
+
     return (
         <GooglePlacesAutocomplete
-                placeholder="Search for a location"
-                onPress={(data, details = null) => {
-                    console.log(data, details)
-                }}
-                query={{
-                    key: APIKEY,
-                    language: 'en',
-                }}
-                fetchDetails={true}
-                styles={{
-                    textInputContainer: {
-                        backgroundColor: 'rgba(0,0,0,0)',
-                        borderTopWidth: 0,
-                        borderBottomWidth: 0,
-                    },
+            placeholder="Search for a location"
+            debounce={100}
+            minLength={2}
+            query={{
+                key: APIKEY,
+                language: 'en',
+            }}
+            onPress={handlePlaceSelection}
+            fetchDetails={true}
+            returnKeyType={"search"}
+            enablePoweredByContainer={false}
+            styles={{
+                textInputContainer: {
+                    backgroundColor: 'rgba(0,0,0,0)',
+                    borderTopWidth: 0,
+                    borderBottomWidth: 0,
+                },
                 textInput: {
                     marginLeft: 10,
                     marginRight: 10,
