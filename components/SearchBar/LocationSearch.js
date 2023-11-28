@@ -32,6 +32,7 @@ const LocationSearch = ({ onSelectLocation }) => {
             fetchDetails={true}
             returnKeyType={"search"}
             enablePoweredByContainer={false}
+            
 
             // style={[styles.textInput, styles.textInputContainer]}
             styles={{

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { View, Text } from 'react-native';
-import { PROVIDER_GOOGLE, Marker, Polygon, Callout, CalloutSubview } from 'react-native-maps';
+import { PROVIDER_GOOGLE, Marker, Callout, CalloutSubview } from 'react-native-maps';
 import styles from './styles';
 import MapView from 'react-native-map-clustering';
 import Zone1 from '../Zones/Zone1';
@@ -36,35 +36,58 @@ import LocationSearch from '../SearchBar/LocationSearch';
 import ResetMapButton from '../ResetButton/ResetMapButton';
 
 
-
-
 const Map = () => {
     const mapRef = useRef(null);
 
     const initialRegion = {
-        latitude: 55.953300000000000,
-        longitude: -3.188300000000000,
-        latitudeDelta: 0.092200000000000,
-        longitudeDelta: 0.042100000000000
+        latitude: 55.9533,
+        longitude: -3.1883,
+        latitudeDelta: 0.0922,
+        longitudeDelta: 0.0421
     }
 
     const [bicycleSpots, setBicycleSpots] = useState([])
     const [parkingSpots, setParkingSpots] = useState([])
     const [region, setRegion] = useState(initialRegion)
-
+// TODO: use promise.all here ;)
     useEffect(() => {
         fetch('http://localhost:8080/bicyclespots')
             .then(res => res.json())
-            .then(spotData => setBicycleSpots(spotData))
+            .then(spotData => {
+                const bicycleItems = spotData.map((spot) => (
+                    <Marker
+                        key={spot.council_identifier}
+                        coordinate={{ latitude: spot.latitude, longitude: spot.longitude }}
+                        title={`${spot.capacity} bicycle spots`}
+                        pinColor='blue'
+                        // image={require 'path'}
+                    />
+                ))
+                setBicycleSpots(bicycleItems)
+            })
         fetch('http://localhost:8080/parkingspots')
             .then(res => res.json())
-            .then(parkingSpotData => setParkingSpots(parkingSpotData))
+            .then(parkingSpotData => {
+                
+                const parkingSpotItems = parkingSpotData.map((parkingSpot) => (
+                    <Marker
+                        key={parkingSpot.councilBayIdentifier}
+                        coordinate={{ latitude: parkingSpot.defaultLatitude, longitude: parkingSpot.defaultLongitude }}
+                        ><Callout >
+                            <Text>Test</Text>
+                            <Text style={styles.text}>{`Price: ${parkingSpot.parkingZone}`}</Text>
+                            <Text style={styles.text}>See restictions</Text> 
+                        </Callout>
+                    </Marker>
+                ))
+                setParkingSpots(parkingSpotItems)
+            })
     }, [])
+
 
     useEffect(() => {
         handleResetMap();
     }, []);
-
 
 
     const handleLocationSelect = (selectedRegion) => {
@@ -82,7 +105,6 @@ const Map = () => {
     }
 
     const handleResetMap = () => {
-        console.log("regionnow", region);
         console.log("regionsta", initialRegion);
         setRegion(initialRegion);
         mapRef.current.animateToRegion(initialRegion, 0.5 * 1000);
@@ -92,46 +114,19 @@ const Map = () => {
     const handleRegionChange = (newRegion) => {
         console.log("handleRegionChange!!!",newRegion);
         if (!region) {
-            setRegionToThis = newRegion;
+            setRegionToThis = newRegion
         } else {
-            console.log("FINISHED moved!");
-            hasMovedLati = Math.abs(newRegion.latitude - region.latitude);
-            hasMovedLong = Math.abs(newRegion.longitude - region.longitude);
+            // console.log("FINISHED moved!");
+            hasMovedLati = Math.abs(newRegion.latitude - region.latitude)
+            hasMovedLong = Math.abs(newRegion.longitude - region.longitude)
             if ((hasMovedLati > 0.1 || hasMovedLong > 0.1)) {
-                setRegionToThis = newRegion;
-            }else{
-                setRegionToThis = region;
+                setRegionToThis = newRegion
+            } else {
+                return 
             }
         }
-        setRegion(setRegionToThis);
+        setRegion(setRegionToThis)
     }
-    const handleRegionChangePartial = (newRegion) => {
-        console.log("moved!");
-    }
-
-
-
-    const bicycleItems = bicycleSpots.map((spot) => (
-        <Marker
-            key={spot.council_identifier}
-            coordinate={{ latitude: spot.latitude, longitude: spot.longitude }}
-            title={`${spot.capacity} bicycle spots`}
-            pinColor='blue'
-            // image={require 'path'}
-        />
-    ))
-
-    const parkingSpotItems = parkingSpots.map((parkingSpot) => (
-        <Marker
-            key={parkingSpot.councilBayIdentifier}
-            coordinate={{ latitude: parkingSpot.defaultLatitude, longitude: parkingSpot.defaultLongitude }}
-            ><Callout >
-                <Text style={styles.text}>{`Price: ${parkingSpot.parkingZone}`}</Text>
-                <Text style={styles.text}>See restictions</Text>
-            </Callout>
-        </Marker>
-        
-    ))
 
     // ToDo: We can set showUserLocation on MapView and we need to look into react-native-permissions
     
@@ -144,8 +139,7 @@ const Map = () => {
                 ref={mapRef}
                 initialRegion={initialRegion}
                 onRegionChangeComplete={handleRegionChange}
-                onRegionChange={handleRegionChangePartial}
-                radius={100}
+                radius={200}
             >
                 <LocationSearch onSelectLocation={handleLocationSelect} />
                 <Zone1 />
@@ -177,8 +171,8 @@ const Map = () => {
                 <ZoneB8 />
                 <ZoneB9 />
                 <ZoneB10 />
-                {bicycleItems}
-                {parkingSpotItems}
+                {bicycleSpots}
+                {parkingSpots}
             </MapView>
             <ResetMapButton onResetMap={handleResetMap} />
         </View>
