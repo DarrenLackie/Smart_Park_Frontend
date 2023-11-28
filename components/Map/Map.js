@@ -36,7 +36,7 @@ import LocationSearch from '../SearchBar/LocationSearch';
 import ResetMapButton from '../ResetButton/ResetMapButton';
 import * as Location from 'expo-location'
 
-const Map = ({userLocation}) => {
+const Map = ({ userLocation }) => {
     const mapRef = useRef(null);
 
     const initialRegion = {
@@ -57,39 +57,46 @@ const Map = ({userLocation}) => {
     }, [userLocation])
     console.log(currentLocation)
 
-// TODO: use promise.all here ;)
     useEffect(() => {
-        fetch('http://localhost:8080/bicyclespots')
-            .then(res => res.json())
-            .then(spotData => {
+        const fetchBicycleSpots = fetch('http://localhost:8080/bicyclespots')
+            .then((res) => res.json());
+
+        const fetchParkingSpots = fetch('http://localhost:8080/parkingspots')
+            .then((res) => res.json());
+
+        Promise.all([fetchBicycleSpots, fetchParkingSpots])
+            .then(([spotData, parkingSpotData]) => {
                 const bicycleItems = spotData.map((spot) => (
                     <Marker
                         key={spot.council_identifier}
                         coordinate={{ latitude: spot.latitude, longitude: spot.longitude }}
                         title={`${spot.capacity} bicycle spots`}
-                        pinColor='blue'
-                        // image={require 'path'}
+                        pinColor="blue"
                     />
-                ))
-                setBicycleSpots(bicycleItems)
-            })
-        fetch('http://localhost:8080/parkingspots')
-            .then(res => res.json())
-            .then(parkingSpotData => {
-                
+                ));
+
                 const parkingSpotItems = parkingSpotData.map((parkingSpot) => (
                     <Marker
                         key={parkingSpot.councilBayIdentifier}
-                        coordinate={{ latitude: parkingSpot.defaultLatitude, longitude: parkingSpot.defaultLongitude }}
-                        ><Callout >
+                        coordinate={{
+                            latitude: parkingSpot.defaultLatitude,
+                            longitude: parkingSpot.defaultLongitude,
+                        }}
+                    >
+                        <Callout>
                             <Text>Test</Text>
                             <Text style={styles.text}>{`Price: ${parkingSpot.parkingZone}`}</Text>
-                            <Text style={styles.text}>See restictions</Text> 
+                            <Text style={styles.text}>See restrictions</Text>
                         </Callout>
                     </Marker>
-                ))
-                setParkingSpots(parkingSpotItems)
+                ));
+
+                setBicycleSpots(bicycleItems);
+                setParkingSpots(parkingSpotItems);
             })
+            .catch((error) => {
+                console.error('Error fetching data:', error);
+            });
     }, [])
 
 
@@ -130,14 +137,14 @@ const Map = ({userLocation}) => {
             if ((hasMovedLatitude > 0.1 || hasMovedLongitude > 0.1)) {
                 setRegionToThis = newRegion
             } else {
-                return 
+                return
             }
         }
         setRegion(setRegionToThis)
     }
 
     // ToDo: We can set showUserLocation on MapView and we need to look into react-native-permissions
-    
+
     return (
         <View style={styles.container}>
             <MapView
@@ -150,7 +157,7 @@ const Map = ({userLocation}) => {
             >
                 <LocationSearch onSelectLocation={handleLocationSelect} />
                 {currentLocation && currentLocation.coords && (
-                    <Marker 
+                    <Marker
                         coordinate={{
                             latitude: currentLocation.coords.latitude,
                             longitude: currentLocation.coords.longitude
