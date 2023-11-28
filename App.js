@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Map from './components/Map/Map';
 import * as Location from 'expo-location';
-import { StyleSheet, Text, View } from 'react-native';
 
 export default function App() {
   const [userLocation, setUserLocation] = useState(null);

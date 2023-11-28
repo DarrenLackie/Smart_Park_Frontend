@@ -58,10 +58,10 @@ const Map = ({ userLocation }) => {
     console.log(currentLocation)
 
     useEffect(() => {
-        const fetchBicycleSpots = fetch('http://localhost:8080/bicyclespots')
+        const fetchBicycleSpots = fetch('http://192.168.0.40:8080/bicyclespots')
             .then((res) => res.json());
 
-        const fetchParkingSpots = fetch('http://localhost:8080/parkingspots')
+        const fetchParkingSpots = fetch('http://192.168.0.40:8080/parkingspots')
             .then((res) => res.json());
 
         Promise.all([fetchBicycleSpots, fetchParkingSpots])
@@ -95,7 +95,7 @@ const Map = ({ userLocation }) => {
                 setParkingSpots(parkingSpotItems);
             })
             .catch((error) => {
-                console.error('Error fetching data:', error);
+                console.error('Error fetching data:', error.message);
             });
     }, [])
 
