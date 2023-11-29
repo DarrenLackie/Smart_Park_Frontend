@@ -35,13 +35,12 @@ import ZoneB9 from '../Zones/ZoneB9';
 import LocationSearch from '../SearchBar/LocationSearch';
 import ResetMapButton from '../ResetButton/ResetMapButton';
 
-
-const Map = () => {
+const Map = ({ userLocation }) => {
     const mapRef = useRef(null);
 
     const initialRegion = {
-        latitude: 55.9533,
-        longitude: -3.1883,
+        latitude: userLocation?.coords.latitude || 55.9533,
+        longitude: userLocation?.coords.longitude || -3.1883,
         latitudeDelta: 0.0922,
         longitudeDelta: 0.0421
     }
@@ -49,99 +48,130 @@ const Map = () => {
     const [bicycleSpots, setBicycleSpots] = useState([])
     const [parkingSpots, setParkingSpots] = useState([])
     const [region, setRegion] = useState(initialRegion)
-// TODO: use promise.all here ;)
+    const [currentLocation, setCurrentLocation] = useState({})
+
+
     useEffect(() => {
-        fetch('http://localhost:8080/bicyclespots')
-            .then(res => res.json())
-            .then(spotData => {
+        setCurrentLocation(userLocation)
+    }, [userLocation])
+    console.log('current location', currentLocation)
+
+    useEffect(() => {
+        const fetchBicycleSpots = fetch('http://10.173.109.78:8080/bicyclespots')
+            .then((res) => res.json())
+
+        const fetchParkingSpots = fetch('http://10.173.109.78:8080/parkingspots')
+            .then((res) => res.json())
+
+        Promise.all([fetchBicycleSpots, fetchParkingSpots])
+            .then(([spotData, parkingSpotData]) => {
                 const bicycleItems = spotData.map((spot) => (
                     <Marker
                         key={spot.council_identifier}
                         coordinate={{ latitude: spot.latitude, longitude: spot.longitude }}
                         title={`${spot.capacity} bicycle spots`}
-                        pinColor='blue'
-                        // image={require 'path'}
+                        pinColor="blue"
                     />
                 ))
-                setBicycleSpots(bicycleItems)
-            })
-        fetch('http://localhost:8080/parkingspots')
-            .then(res => res.json())
-            .then(parkingSpotData => {
-                
+
                 const parkingSpotItems = parkingSpotData.map((parkingSpot) => (
                     <Marker
                         key={parkingSpot.councilBayIdentifier}
-                        coordinate={{ latitude: parkingSpot.defaultLatitude, longitude: parkingSpot.defaultLongitude }}
-                        ><Callout >
+                        coordinate={{
+                            latitude: parkingSpot.defaultLatitude,
+                            longitude: parkingSpot.defaultLongitude,
+                        }}
+                    >
+                        <Callout>
                             <Text>Test</Text>
                             <Text style={styles.text}>{`Price: ${parkingSpot.parkingZone}`}</Text>
-                            <Text style={styles.text}>See restictions</Text> 
+                            <Text style={styles.text}>See restrictions</Text>
                         </Callout>
                     </Marker>
                 ))
-                setParkingSpots(parkingSpotItems)
+
+                setBicycleSpots(bicycleItems);
+                setParkingSpots(parkingSpotItems);
+            })
+            .catch((error) => {
+                console.error('Error fetching data:', error.message);
             })
     }, [])
 
 
     useEffect(() => {
-        handleResetMap();
-    }, []);
+        handleResetMap()
+    }, [userLocation])
 
 
     const handleLocationSelect = (selectedRegion) => {
 
         const aspectRatio = 1
         const latDelta = 0.01
-        const lngDelta = latDelta * aspectRatio;
+        const lngDelta = latDelta * aspectRatio
         // TODO: fix 
         const newRegion = {
             ...selectedRegion,
             latitudeDelta: latDelta,
             longitudeDelta: lngDelta
         }
+        console.log("selectedRegion!!!!!!!!!!!!!!!!!!!!",selectedRegion)
+        mapRef.current.animateToRegion(selectedRegion, 0.5 * 1000)
+
         setRegion(selectedRegion)
     }
 
     const handleResetMap = () => {
-        console.log("regionsta", initialRegion);
-        setRegion(initialRegion);
-        mapRef.current.animateToRegion(initialRegion, 0.5 * 1000);
+        // console.log("regionsta", initialRegion);
+        setRegion(initialRegion)
+        mapRef.current.animateToRegion(initialRegion, 0.5 * 1000)
 
     };
 
     const handleRegionChange = (newRegion) => {
-        console.log("handleRegionChange!!!",newRegion);
+        // Typing in anything to the search bar causes this function to be called WHY???? who knows this hack fixes it lul
+        if (!newRegion){
+            return
+        }
+        console.log("handleRegionChange!!!", newRegion);
         if (!region) {
             setRegionToThis = newRegion
         } else {
-            // console.log("FINISHED moved!");
-            hasMovedLati = Math.abs(newRegion.latitude - region.latitude)
-            hasMovedLong = Math.abs(newRegion.longitude - region.longitude)
-            if ((hasMovedLati > 0.1 || hasMovedLong > 0.1)) {
+            console.log(newRegion);
+            hasMovedLatitude = Math.abs(newRegion.latitude - region.latitude)
+            hasMovedLongitude = Math.abs(newRegion.longitude - region.longitude)
+            if ((hasMovedLatitude > 0.1 || hasMovedLongitude > 0.1)) {
                 setRegionToThis = newRegion
             } else {
-                return 
+                return
             }
         }
         setRegion(setRegionToThis)
     }
 
     // ToDo: We can set showUserLocation on MapView and we need to look into react-native-permissions
-    
+
     return (
         <View style={styles.container}>
             <MapView
                 style={styles.map}
                 provider={PROVIDER_GOOGLE}
-                minPoints={4}
                 ref={mapRef}
                 initialRegion={initialRegion}
                 onRegionChangeComplete={handleRegionChange}
                 radius={200}
             >
                 <LocationSearch onSelectLocation={handleLocationSelect} />
+                {currentLocation && currentLocation.coords && (
+                    <Marker
+                        coordinate={{
+                            latitude: currentLocation.coords.latitude,
+                            longitude: currentLocation.coords.longitude
+                        }}
+                        title="Your Location"
+                        description='This is where you are mate'
+                    />
+                )}
                 <Zone1 />
                 <Zone1A />
                 <Zone2 />

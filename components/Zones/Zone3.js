@@ -6,7 +6,7 @@ const Zone3 = () => {
     const [parkingZoneCoordinates, setParkingZoneCoordinates] = useState([])
 
     useEffect(() => {
-        fetch('http://localhost:8080/zonecoordinates')
+        fetch('http://10.173.109.78:8080/zonecoordinates')
             .then(res => res.json())
             .then(zoneData => setParkingZoneCoordinates(zoneData))
     }, [])
