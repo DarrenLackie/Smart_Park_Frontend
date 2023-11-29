@@ -8,7 +8,7 @@
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/smartpark1.png",
-      "resizeMode": "contain",
+      "resizeMode": "cover",
       "backgroundColor": "##FF5757"
     },
     "assetBundlePatterns": [
