@@ -46,42 +46,5 @@ export default function App() {
 
   return (
     <Map userLocation={userLocation}/>
-    // <View style={styles.container}>
-    //   {location && (
-    //     <MapView
-    //       style={styles.map}
-    //       provider={PROVIDER_GOOGLE}
-    //       initialRegion={{
-    //         latitude: location.coords.latitude,
-    //         longitude: location.coords.longitude,
-    //         latitudeDelta: 0.08,
-    //         longitudeDelta: 0.08,
-    //       }}
-    //     >
-
-    //       <Marker
-    //         coordinate={{
-    //           latitude: location.coords.latitude,
-    //           longitude: location.coords.longitude,
-    //         }}
-    //         title="Your Location"
-    //         description="This is where you are"
-    //       />
-    //     </MapView>
-    //   )}
-    // </View>
   );
 }
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//   },
-//   map: {
-//     flex: 1,
-//     width: '100%',
-//     height: '100%'
-//   },
-// });

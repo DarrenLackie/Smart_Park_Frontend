@@ -34,7 +34,6 @@ import ZoneB10 from '../Zones/ZoneB10';
 import ZoneB9 from '../Zones/ZoneB9';
 import LocationSearch from '../SearchBar/LocationSearch';
 import ResetMapButton from '../ResetButton/ResetMapButton';
-import * as Location from 'expo-location'
 
 const Map = ({ userLocation }) => {
     const mapRef = useRef(null);
@@ -55,14 +54,14 @@ const Map = ({ userLocation }) => {
     useEffect(() => {
         setCurrentLocation(userLocation)
     }, [userLocation])
-    console.log(currentLocation)
+    console.log('current location', currentLocation)
 
     useEffect(() => {
-        const fetchBicycleSpots = fetch('http://192.168.0.40:8080/bicyclespots')
-            .then((res) => res.json());
+        const fetchBicycleSpots = fetch('http://10.173.109.78:8080/bicyclespots')
+            .then((res) => res.json())
 
-        const fetchParkingSpots = fetch('http://192.168.0.40:8080/parkingspots')
-            .then((res) => res.json());
+        const fetchParkingSpots = fetch('http://10.173.109.78:8080/parkingspots')
+            .then((res) => res.json())
 
         Promise.all([fetchBicycleSpots, fetchParkingSpots])
             .then(([spotData, parkingSpotData]) => {
@@ -73,7 +72,7 @@ const Map = ({ userLocation }) => {
                         title={`${spot.capacity} bicycle spots`}
                         pinColor="blue"
                     />
-                ));
+                ))
 
                 const parkingSpotItems = parkingSpotData.map((parkingSpot) => (
                     <Marker
@@ -89,49 +88,56 @@ const Map = ({ userLocation }) => {
                             <Text style={styles.text}>See restrictions</Text>
                         </Callout>
                     </Marker>
-                ));
+                ))
 
                 setBicycleSpots(bicycleItems);
                 setParkingSpots(parkingSpotItems);
             })
             .catch((error) => {
                 console.error('Error fetching data:', error.message);
-            });
+            })
     }, [])
 
 
     useEffect(() => {
-        handleResetMap();
-    }, [userLocation]);
+        handleResetMap()
+    }, [userLocation])
 
 
     const handleLocationSelect = (selectedRegion) => {
 
         const aspectRatio = 1
         const latDelta = 0.01
-        const lngDelta = latDelta * aspectRatio;
+        const lngDelta = latDelta * aspectRatio
         // TODO: fix 
         const newRegion = {
             ...selectedRegion,
             latitudeDelta: latDelta,
             longitudeDelta: lngDelta
         }
+        console.log("selectedRegion!!!!!!!!!!!!!!!!!!!!",selectedRegion)
+        mapRef.current.animateToRegion(selectedRegion, 0.5 * 1000)
+
         setRegion(selectedRegion)
     }
 
     const handleResetMap = () => {
         // console.log("regionsta", initialRegion);
-        setRegion(initialRegion);
-        mapRef.current.animateToRegion(initialRegion, 0.5 * 1000);
+        setRegion(initialRegion)
+        mapRef.current.animateToRegion(initialRegion, 0.5 * 1000)
 
     };
 
     const handleRegionChange = (newRegion) => {
-        // console.log("handleRegionChange!!!",newRegion);
+        // Typing in anything to the search bar causes this function to be called WHY???? who knows this hack fixes it lul
+        if (!newRegion){
+            return
+        }
+        console.log("handleRegionChange!!!", newRegion);
         if (!region) {
             setRegionToThis = newRegion
         } else {
-            // console.log("FINISHED moving!");
+            console.log(newRegion);
             hasMovedLatitude = Math.abs(newRegion.latitude - region.latitude)
             hasMovedLongitude = Math.abs(newRegion.longitude - region.longitude)
             if ((hasMovedLatitude > 0.1 || hasMovedLongitude > 0.1)) {
