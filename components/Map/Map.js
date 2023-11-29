@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, TouchableOpacity} from 'react-native';
 import { PROVIDER_GOOGLE, Marker, Callout, CalloutSubview } from 'react-native-maps';
 import styles from './styles';
 import MapView from 'react-native-map-clustering';
@@ -47,6 +47,8 @@ const Map = ({ userLocation }) => {
 
     const [bicycleSpots, setBicycleSpots] = useState([])
     const [parkingSpots, setParkingSpots] = useState([])
+    const [showBicycleSpots, setShowBicycleSpots] = useState(true);
+    const [showParkingSpots, setShowParkingSpots] = useState(true);
     const [region, setRegion] = useState(initialRegion)
     const [currentLocation, setCurrentLocation] = useState({})
 
@@ -83,7 +85,7 @@ const Map = ({ userLocation }) => {
                         }}
                     >
                         <Callout>
-                            <Text style={styles.text}>{`Price: £${(parkingSpot.price/100).toFixed(2)}`}</Text>
+                            <Text style={styles.text}>{`Price: £${(parkingSpot.price/100).toFixed(2)} / hour`}</Text>
                             <Text style={styles.text}>See restrictions</Text>
                         </Callout>
                     </Marker>
@@ -146,7 +148,26 @@ const Map = ({ userLocation }) => {
         setRegion(setRegionToThis)
     }
 
+    const toggleBicycleSpots = () => {
+        setShowBicycleSpots(!showBicycleSpots);
+    };
+
+    const toggleParkingSpots = () => {
+        setShowParkingSpots(!showParkingSpots);
+    };
+
     return (
+        <>
+        <TouchableOpacity onPress={toggleBicycleSpots}>
+                    <Text style={styles.bicycleToggle}>
+                        {showBicycleSpots ? 'Hide Bicycle Spots' : 'Show Bicycle Spots'}
+                    </Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={toggleParkingSpots}>
+                    <Text style={styles.vehicleToggle}>
+                        {showParkingSpots ? 'Hide Parking Spots' : 'Show Parking Spots'}
+                    </Text>
+        </TouchableOpacity>
         <View style={styles.container}>
             <MapView
                 style={styles.map}
@@ -189,9 +210,12 @@ const Map = ({ userLocation }) => {
                 <ZoneB10 />
                 {bicycleSpots}
                 {parkingSpots}
+                {showBicycleSpots && bicycleSpots}
+                {showParkingSpots && parkingSpots}
             </MapView>
             <ResetMapButton onResetMap={handleResetMap} />
         </View>
+        </>
     )
 }
 
