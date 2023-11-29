@@ -8,8 +8,8 @@
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/smartpark1.png",
-      "resizeMode": "cover",
-      "backgroundColor": "##FF5757"
+      "resizeMode": "contain",
+      "backgroundColor": "#FF5757"
     },
     "assetBundlePatterns": [
       "**/*"
@@ -17,12 +17,12 @@
     "ios": {
       "supportsTablet": true,
       "image": "./assets/smartpark1.png",
-      "backgroundColor": "##FF5757"
+      "backgroundColor": "#FF5757"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/smartpark1.png",
-        "backgroundColor": "##FF5757"
+        "backgroundColor": "#FF5757"
       }
     },
     "web": {
