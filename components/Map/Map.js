@@ -57,10 +57,10 @@ const Map = ({ userLocation }) => {
     console.log('current location', currentLocation)
 
     useEffect(() => {
-        const fetchBicycleSpots = fetch('http://10.173.109.78:8080/bicyclespots')
+        const fetchBicycleSpots = fetch('http://localhost:8080/bicyclespots')
             .then((res) => res.json())
 
-        const fetchParkingSpots = fetch('http://10.173.109.78:8080/parkingspots')
+        const fetchParkingSpots = fetch('http://localhost:8080/parkingspots')
             .then((res) => res.json())
 
         Promise.all([fetchBicycleSpots, fetchParkingSpots])
@@ -83,8 +83,7 @@ const Map = ({ userLocation }) => {
                         }}
                     >
                         <Callout>
-                            <Text>Test</Text>
-                            <Text style={styles.text}>{`Price: ${parkingSpot.parkingZone}`}</Text>
+                            <Text style={styles.text}>{`Price: £${(parkingSpot.price/100).toFixed(2)}`}</Text>
                             <Text style={styles.text}>See restrictions</Text>
                         </Callout>
                     </Marker>
