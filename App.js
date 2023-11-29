@@ -52,7 +52,7 @@ export default function App() {
   }, [])
 
   return (
-    // <Map userLocation={userLocation}/>
-    <Directions userLocation={userLocation}/>
+    <Map userLocation={userLocation}/>
+    // <Directions userLocation={userLocation}/>
   )
 }
