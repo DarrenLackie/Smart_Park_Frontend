@@ -43,16 +43,21 @@ const LocationSearch = ({ onSelectLocation }) => {
                 },
                 textInput: {
                     marginLeft: 20,
-                    marginRight: 20,
+                    marginRight: 100,
                     marginTop: 70,
                     height: 50,
                     color: '#000',
                     fontSize: 16,
-                    // position: "absolute",
-                    // marginBottom: useWindowDimensions - 40,
+                    shadowColor: 'gray',
+                    shadowOffset: 2, //idk why this line freaks it out- it should be good to go
+                    shadowOpacity: 0.8,
+                    borderRadius: 5
                 },
                 predefinedPlacesDescription: {
                     color: '#000',
+                    marginLeft: 20,
+                    marginRight: 20,
+                    width: 90
                 }
             }}
         />
