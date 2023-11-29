@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { View, Text } from 'react-native';
-import { PROVIDER_GOOGLE, Marker, Callout } from 'react-native-maps';
+import { PROVIDER_GOOGLE, Marker, Callout, CalloutSubview } from 'react-native-maps';
 import styles from './styles';
 import MapView from 'react-native-map-clustering';
 import Zone1 from '../Zones/Zone1';
@@ -34,7 +34,6 @@ import ZoneB10 from '../Zones/ZoneB10';
 import ZoneB9 from '../Zones/ZoneB9';
 import LocationSearch from '../SearchBar/LocationSearch';
 import ResetMapButton from '../ResetButton/ResetMapButton';
-import axios from 'axios'
 
 const Map = ({ userLocation }) => {
     const mapRef = useRef(null);
@@ -55,6 +54,7 @@ const Map = ({ userLocation }) => {
     useEffect(() => {
         setCurrentLocation(userLocation)
     }, [userLocation])
+    console.log('current location', currentLocation)
 
     useEffect(() => {
         const fetchBicycleSpots = fetch('http://localhost:8080/bicyclespots')
@@ -93,6 +93,7 @@ const Map = ({ userLocation }) => {
                 setParkingSpots(parkingSpotItems);
             })
             .catch((error) => {
+                console.error('Error fetching data:', error.message);
             })
     }, [])
 
@@ -107,6 +108,7 @@ const Map = ({ userLocation }) => {
         const aspectRatio = 1
         const latDelta = 0.01
         const lngDelta = latDelta * aspectRatio
+        // TODO: fix 
         const newRegion = {
             ...selectedRegion,
             latitudeDelta: latDelta,
@@ -124,21 +126,19 @@ const Map = ({ userLocation }) => {
     };
 
     const handleRegionChange = (newRegion) => {
-        // Typing in anything to the search bar causes this function to be called WHY???? This first if statement fixes that.
+
         if (!newRegion){
             return
         }
 
         if (!region) {
             setRegionToThis = newRegion
-
         } else {
+            console.log(newRegion);
             hasMovedLatitude = Math.abs(newRegion.latitude - region.latitude)
             hasMovedLongitude = Math.abs(newRegion.longitude - region.longitude)
-
             if ((hasMovedLatitude > 0.1 || hasMovedLongitude > 0.1)) {
                 setRegionToThis = newRegion
-
             } else {
                 return
             }
@@ -153,9 +153,9 @@ const Map = ({ userLocation }) => {
                 provider={PROVIDER_GOOGLE}
                 ref={mapRef}
                 initialRegion={initialRegion}
-                showsUserLocation={true}
                 onRegionChangeComplete={handleRegionChange}
                 radius={200}
+                showsUserLocation={true}
             >
                 <LocationSearch onSelectLocation={handleLocationSelect} />
                 <Zone1 />

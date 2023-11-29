@@ -26,16 +26,18 @@ const ZoneS3 = () => {
         return null;
     })
 
-    // console.log(parkingZoneItems)
-
-
+    const handlePress = () => {
+        Alert.alert('Parking Info', 'Price: money')
+    }
 
     return (
         <Polygon 
-        coordinates={coordinateList}
-        strokeColor="#7800F0" // fallback for when `strokeColors` is not supported by the map-provider
-        strokeWidth={2} />
+            coordinates={coordinateList}
+            strokeWidth={2}
+            strokeColor="#7800F0"
+            onPress={handlePress}
+            tappable={true}
+        />
     );
 }
-
 export default ZoneS3;

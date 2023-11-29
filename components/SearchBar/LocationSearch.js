@@ -1,5 +1,4 @@
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete"; 
-import { View } from "react-native";
 import APIKEY from '../../secrets'
 
 const LocationSearch = ({ onSelectLocation }) => {
@@ -32,7 +31,6 @@ const LocationSearch = ({ onSelectLocation }) => {
             fetchDetails={true}
             returnKeyType={"search"}
             enablePoweredByContainer={false}
-            
 
             // style={[styles.textInput, styles.textInputContainer]}
             styles={{
@@ -54,7 +52,7 @@ const LocationSearch = ({ onSelectLocation }) => {
                     color: '#000',
                     fontSize: 16,
                     shadowColor: 'gray',
-                    shadowOffset: 2, //idk why this line freaks it out- it should be good to go
+                    shadowOffset: {width: 2, height: 2},
                     shadowOpacity: 0.8,
                     borderRadius: 5
                 },
