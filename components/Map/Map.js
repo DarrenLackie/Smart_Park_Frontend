@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { View, Text } from 'react-native';
-import { PROVIDER_GOOGLE, Marker, Callout, CalloutSubview } from 'react-native-maps';
+import { PROVIDER_GOOGLE, Marker, Callout } from 'react-native-maps';
 import styles from './styles';
 import MapView from 'react-native-map-clustering';
 import Zone1 from '../Zones/Zone1';
@@ -34,6 +34,7 @@ import ZoneB10 from '../Zones/ZoneB10';
 import ZoneB9 from '../Zones/ZoneB9';
 import LocationSearch from '../SearchBar/LocationSearch';
 import ResetMapButton from '../ResetButton/ResetMapButton';
+import axios from 'axios'
 
 const Map = ({ userLocation }) => {
     const mapRef = useRef(null);
@@ -54,7 +55,6 @@ const Map = ({ userLocation }) => {
     useEffect(() => {
         setCurrentLocation(userLocation)
     }, [userLocation])
-    console.log('current location', currentLocation)
 
     useEffect(() => {
         const fetchBicycleSpots = fetch('http://localhost:8080/bicyclespots')
@@ -93,7 +93,6 @@ const Map = ({ userLocation }) => {
                 setParkingSpots(parkingSpotItems);
             })
             .catch((error) => {
-                console.error('Error fetching data:', error.message);
             })
     }, [])
 
@@ -108,47 +107,44 @@ const Map = ({ userLocation }) => {
         const aspectRatio = 1
         const latDelta = 0.01
         const lngDelta = latDelta * aspectRatio
-        // TODO: fix 
         const newRegion = {
             ...selectedRegion,
             latitudeDelta: latDelta,
             longitudeDelta: lngDelta
         }
-        console.log("selectedRegion!!!!!!!!!!!!!!!!!!!!",selectedRegion)
         mapRef.current.animateToRegion(selectedRegion, 0.5 * 1000)
 
         setRegion(selectedRegion)
     }
 
     const handleResetMap = () => {
-        // console.log("regionsta", initialRegion);
         setRegion(initialRegion)
         mapRef.current.animateToRegion(initialRegion, 0.5 * 1000)
 
     };
 
     const handleRegionChange = (newRegion) => {
-        // Typing in anything to the search bar causes this function to be called WHY???? who knows this hack fixes it lul
+        // Typing in anything to the search bar causes this function to be called WHY???? This first if statement fixes that.
         if (!newRegion){
             return
         }
-        console.log("handleRegionChange!!!", newRegion);
+
         if (!region) {
             setRegionToThis = newRegion
+
         } else {
-            console.log(newRegion);
             hasMovedLatitude = Math.abs(newRegion.latitude - region.latitude)
             hasMovedLongitude = Math.abs(newRegion.longitude - region.longitude)
+
             if ((hasMovedLatitude > 0.1 || hasMovedLongitude > 0.1)) {
                 setRegionToThis = newRegion
+
             } else {
                 return
             }
         }
         setRegion(setRegionToThis)
     }
-
-    // ToDo: We can set showUserLocation on MapView and we need to look into react-native-permissions
 
     return (
         <View style={styles.container}>
@@ -157,20 +153,11 @@ const Map = ({ userLocation }) => {
                 provider={PROVIDER_GOOGLE}
                 ref={mapRef}
                 initialRegion={initialRegion}
+                showsUserLocation={true}
                 onRegionChangeComplete={handleRegionChange}
                 radius={200}
             >
                 <LocationSearch onSelectLocation={handleLocationSelect} />
-                {currentLocation && currentLocation.coords && (
-                    <Marker
-                        coordinate={{
-                            latitude: currentLocation.coords.latitude,
-                            longitude: currentLocation.coords.longitude
-                        }}
-                        title="Your Location"
-                        description='This is where you are mate'
-                    />
-                )}
                 <Zone1 />
                 <Zone1A />
                 <Zone2 />
