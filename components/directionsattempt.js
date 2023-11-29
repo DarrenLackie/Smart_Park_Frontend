@@ -4,17 +4,18 @@ import MapViewDirections from 'react-native-maps-directions';
 import styles from './Map/styles';
 import APIKEY from '../secrets';
 
-const Directions = () => {
-    const origin = { latitude: 37.78825, longitude: -122.4324 };
-    const destination = { latitude: 37.7749, longitude: -122.4194 };
+const Directions = ({ userLocation }) => {
+    const origin = {latitude: userLocation.coords.latitude, longitude: userLocation.coords.longitude}
+    console.log('origin!!!!!!!!!!!!!!!!!!!!!: ', origin)
+    const destination = { latitude: 55.942422, longitude: -3.265933 };
 
     return (
         <MapView
             style={styles.map}
             provider={PROVIDER_GOOGLE}
             initialRegion={{
-                latitude: 37.78825,
-                longitude: -122.4324,
+                latitude: userLocation.coords.latitude,
+                longitude: userLocation.coords.longitude,
                 latitudeDelta: 0.0922,
                 longitudeDelta: 0.0421,
             }}

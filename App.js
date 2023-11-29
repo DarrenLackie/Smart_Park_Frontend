@@ -3,8 +3,14 @@ import Map from './components/Map/Map';
 import * as Location from 'expo-location';
 import Directions from './components/directionsattempt';
 
+
 export default function App() {
-  const [userLocation, setUserLocation] = useState(null)
+  const [userLocation, setUserLocation] = useState({coords: {
+    latitude: 55.9533,
+    longitude: -3.1883,
+    latitudeDelta: 0.0922,
+    longitudeDelta: 0.0421
+}})
 
   useEffect(() => {
     const startLocationUpdates = async () => {
@@ -47,6 +53,6 @@ export default function App() {
 
   return (
     // <Map userLocation={userLocation}/>
-    <Directions />
+    <Directions userLocation={userLocation}/>
   )
 }

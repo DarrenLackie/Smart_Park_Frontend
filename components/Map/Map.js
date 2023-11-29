@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { View, Text } from 'react-native';
-import { PROVIDER_GOOGLE, Marker, Callout, CalloutSubview } from 'react-native-maps';
+import { PROVIDER_GOOGLE, Marker, Callout } from 'react-native-maps';
 import styles from './styles';
 import MapView from 'react-native-map-clustering';
 import Zone1 from '../Zones/Zone1';
