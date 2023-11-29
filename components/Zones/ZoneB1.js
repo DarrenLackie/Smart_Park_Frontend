@@ -33,7 +33,7 @@ const ZoneB1 = () => {
     return (
         <Polygon 
         coordinates={coordinateList}
-        strokeColor="black" // fallback for when `strokeColors` is not supported by the map-provider
+        strokeColor="#7800F0" // fallback for when `strokeColors` is not supported by the map-provider
         strokeWidth={2} />
     );
 }

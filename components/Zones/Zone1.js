@@ -30,6 +30,7 @@ const Zone1 = () => {
         <Polygon 
         coordinates={coordinateList}
         strokeWidth={2}
+        strokeColor="#7800F0"
         />
     );
 }
