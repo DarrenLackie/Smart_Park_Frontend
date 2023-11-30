@@ -32,6 +32,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 15,
         borderColor: 'black',
         borderWidth: 1,
+        overflow: 'hidden',
     },
     vehicletoggle: {
         backgroundColor: 'white',
@@ -47,6 +48,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 15,
         borderColor: 'black',
         borderWidth: 1,
+        overflow: 'hidden',
     },
 });
 
