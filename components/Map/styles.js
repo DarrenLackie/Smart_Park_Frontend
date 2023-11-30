@@ -18,6 +18,26 @@ const styles = StyleSheet.create({
         color: 'black',
     },
 
+    bicycletoggle: {
+        color: 'black',
+        backgroundColor: 'white',
+        marginTop: 100,
+        marginLeft: 20,
+        paddingLeft: 10,
+        height: 50,
+        position: 'absolute',
+    },
+
+    vehicletoggle: {
+        color: 'black',
+        backgroundColor: 'white',
+        marginTop: 100,
+        marginLeft: 20,
+        paddingLeft: 10,
+        height: 50,
+        position: 'absolute',
+    },
+
     // callout: {
     //     height: 50,
     // }
