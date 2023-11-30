@@ -16,16 +16,20 @@ const Zone1 = () => {
             .then(zoneData => setParkingZoneCoordinates(zoneData))
 
     // TODO FIX THIS!!!!!!
-        // fetch('http://localhost:8080/parkingzones/{parkingZoneId}')
-        //     .then(res => res.json())
-        //     .then(zoneInfo => {
-        //         setPrice(zoneInfo.price)
-        //         setHours(zoneInfo.parkingHours)
-        //     })
+        fetch(`http://localhost:8080/parkingzones/${parkingZoneId}`)
+            .then(res => res.json())
+            .then(zoneInfo => {
+                setPrice(zoneInfo.price)
+                setHours(zoneInfo.parkingHours)
+            })
 
     }, [])
 
-    // console.log(zoneInfo)
+    // console.log('hourssssssssss', hours.monStart)
+
+    const pricePerHour = `£${(price / 100).toFixed(2)}`
+    const weekdayHours = "08:30 - 18:30"
+    const sundayHours = "12:30 - 18:30"
 
     const coordinateList = [];
 
@@ -43,8 +47,8 @@ const Zone1 = () => {
 
     // TODO enter price and hours data
     const handlePress = () => {
-        console.log('hours: ', hours, 'price: ', price)
-        Alert.alert('Parking Info','hadgasdg' )
+
+        Alert.alert(`${pricePerHour} per hour`, `Mon-Sat: ${weekdayHours} | Sun: ${sundayHours}`)
     }
 
     return (

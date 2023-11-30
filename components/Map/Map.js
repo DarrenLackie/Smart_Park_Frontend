@@ -54,7 +54,6 @@ const Map = ({ userLocation }) => {
     useEffect(() => {
         setCurrentLocation(userLocation)
     }, [userLocation])
-    console.log('current location', currentLocation)
 
     useEffect(() => {
         const fetchBicycleSpots = fetch('http://localhost:8080/bicyclespots')
@@ -71,6 +70,7 @@ const Map = ({ userLocation }) => {
                         coordinate={{ latitude: spot.latitude, longitude: spot.longitude }}
                         title={`${spot.capacity} bicycle spots`}
                         pinColor="blue"
+                        identifier='bikeSpots'
                     />
                 ))
 
@@ -81,6 +81,7 @@ const Map = ({ userLocation }) => {
                             latitude: parkingSpot.defaultLatitude,
                             longitude: parkingSpot.defaultLongitude,
                         }}
+                        identifier='parkingSpots'
                     >
                         <Callout>
                             <Text style={styles.text}>{`Price: £${(parkingSpot.price/100).toFixed(2)}`}</Text>
@@ -133,12 +134,14 @@ const Map = ({ userLocation }) => {
 
         if (!region) {
             setRegionToThis = newRegion
+            
         } else {
-            console.log(newRegion);
             hasMovedLatitude = Math.abs(newRegion.latitude - region.latitude)
             hasMovedLongitude = Math.abs(newRegion.longitude - region.longitude)
+
             if ((hasMovedLatitude > 0.1 || hasMovedLongitude > 0.1)) {
                 setRegionToThis = newRegion
+
             } else {
                 return
             }
@@ -146,15 +149,21 @@ const Map = ({ userLocation }) => {
         setRegion(setRegionToThis)
     }
 
+    const minZoom = {latitudeDelta: 0.050704, longitudeDelta: 0.0041842 }
+
+
     return (
         <View style={styles.container}>
             <MapView
                 style={styles.map}
+                clu
+                // minZoom={minZoom}
+                // clusterColor='red'
                 provider={PROVIDER_GOOGLE}
                 ref={mapRef}
                 initialRegion={initialRegion}
                 onRegionChangeComplete={handleRegionChange}
-                radius={200}
+                radius={150}
                 showsUserLocation={true}
             >
                 <LocationSearch onSelectLocation={handleLocationSelect} />

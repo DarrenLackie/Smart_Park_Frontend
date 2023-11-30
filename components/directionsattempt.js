@@ -6,7 +6,6 @@ import APIKEY from '../secrets';
 
 const Directions = ({ userLocation }) => {
     const origin = {latitude: userLocation.coords.latitude, longitude: userLocation.coords.longitude}
-    console.log('origin!!!!!!!!!!!!!!!!!!!!!: ', origin)
     const destination = { latitude: 55.942422, longitude: -3.265933 };
 
     return (
