@@ -161,16 +161,6 @@ const Map = ({ userLocation }) => {
 
     return (
         <>
-        <TouchableOpacity onPress={toggleBicycleSpots}>
-                    <Text style={styles.bicycleToggle}>
-                        {showBicycleSpots ? 'Hide Bicycle Spots' : 'Show Bicycle Spots'}
-                    </Text>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={toggleParkingSpots}>
-                    <Text style={styles.vehicleToggle}>
-                        {showParkingSpots ? 'Hide Parking Spots' : 'Show Parking Spots'}
-                    </Text>
-        </TouchableOpacity>
         <View style={styles.container}>
             <MapView
                 style={styles.map}
@@ -184,6 +174,16 @@ const Map = ({ userLocation }) => {
                 radius={150}
                 showsUserLocation={true}
             >
+                {/* <TouchableOpacity onPress={toggleBicycleSpots}>
+                    <Text style={styles.bicycleToggle}>
+                        {showBicycleSpots ? 'Hide Bicycle Spots' : 'Show Bicycle Spots'}
+                    </Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={toggleParkingSpots}>
+                    <Text style={styles.vehicleToggle}>
+                        {showParkingSpots ? 'Hide Parking Spots' : 'Show Parking Spots'}
+                    </Text>
+                </TouchableOpacity> */}
                 <LocationSearch onSelectLocation={handleLocationSelect} />
                 <Zone1 />
                 <Zone1A />
