@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import Map from './components/Map/Map';
 import * as Location from 'expo-location';
-import Directions from './components/directionsattempt';
-import LocationSearch from './components/SearchBar/LocationSearch';
 
 
 export default function App() {
-  const [userLocation, setUserLocation] = useState({coords: {
-    latitude: 55.9533,
-    longitude: -3.1883,
-    latitudeDelta: 0.0922,
-    longitudeDelta: 0.0421
-}})
+  const [userLocation, setUserLocation] = useState({
+    coords: {
+      latitude: 55.9533,
+      longitude: -3.1883,
+      latitudeDelta: 0.0922,
+      longitudeDelta: 0.0421
+    }
+  })
 
   useEffect(() => {
     const startLocationUpdates = async () => {
@@ -27,15 +27,15 @@ export default function App() {
           // start location updates
           Location.startLocationUpdatesAsync('locationUpdates', {
             accuracy: Location.Accuracy.Highest,
-            distanceInterval: 10, // Update location every 10 meters
-            timeInterval: 1000, // 1 second
+            distanceInterval: 10, // Updates location every 10 meters
+            timeInterval: 1000,
           })
 
-          // subscribe to location updates
+          // receive location updates
           Location.EventEmitter.addListener('Expo.locationChanged', (event) => {
-            // console.log('New location:', event)
             setUserLocation(event)
           })
+
         } else {
           console.log('Permission was denied')
         }
@@ -44,16 +44,17 @@ export default function App() {
       }
     }
 
-    startLocationUpdates()
+      startLocationUpdates()
 
-    // stop location updates when the component unmounts
-    return () => {
-      Location.stopLocationUpdatesAsync('locationUpdates')
-    }
-  }, [])
+      // stop location updates when the component unmounts
+      return () => {
+        Location.stopLocationUpdatesAsync('locationUpdates')
+      }
+    }, [])
 
-  return (
-    <Map userLocation={userLocation}/>
-    // <LocationSearch userLocation={userLocation}/>
-  )
-}
+    return (
+
+      <Map userLocation={userLocation} />
+
+    )
+  }

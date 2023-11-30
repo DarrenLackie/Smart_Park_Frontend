@@ -15,7 +15,6 @@ const Zone1 = () => {
             .then(res => res.json())
             .then(zoneData => setParkingZoneCoordinates(zoneData))
 
-    // TODO FIX THIS!!!!!!
         fetch(`http://localhost:8080/parkingzones/${parkingZoneId}`)
             .then(res => res.json())
             .then(zoneInfo => {
@@ -24,8 +23,6 @@ const Zone1 = () => {
             })
 
     }, [])
-
-    // console.log('hourssssssssss', hours.monStart)
 
     const pricePerHour = `£${(price / 100).toFixed(2)}`
     const weekdayHours = "08:30 - 18:30"
@@ -45,9 +42,7 @@ const Zone1 = () => {
         return null;
     })
 
-    // TODO enter price and hours data
     const handlePress = () => {
-
         Alert.alert(`${pricePerHour} per hour`, `Mon-Sat: ${weekdayHours} | Sun: ${sundayHours}`)
     }
 
