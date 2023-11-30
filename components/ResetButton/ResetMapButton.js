@@ -19,18 +19,22 @@ const ResetMapButton = ({ onResetMap }) => {
 
 const styles = StyleSheet.create({
     button: {
-        marginLeft: 340,
-        marginRight: 30,
+        // marginLeft: 340,
+        position: 'absolute',
+        right: 0,
+        marginRight: 20,
         marginTop: 70,
         height: 50,
         width: 70,
-        alignContent: 'center',
+
         textAlign: 'center',
         fontSize: 16,
         color: '#000',
         backgroundColor: '#fff',
 
         position: 'absolute',
+        paddingTop: 7,
+
         shadowColor: 'gray',
         shadowOffset: {width: 2, height: 2},
         shadowOpacity: 0.8,
