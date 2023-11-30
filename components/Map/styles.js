@@ -19,37 +19,35 @@ const styles = StyleSheet.create({
     },
 
     bicycletoggle: {
-        color: 'black',
         backgroundColor: 'white',
-        marginTop: 100,
-        marginLeft: 20,
+        marginTop: 130,
+        marginLeft: 40,
         paddingLeft: 10,
-        height: 50,
+        height: 40,
         position: 'absolute',
+        flexDirection: 'row',
+        alignItems: 'center',
+        borderRadius: 8,
+        paddingVertical: 10,
+        paddingHorizontal: 15,
+        borderColor: 'black',
+        borderWidth: 1,
     },
-
     vehicletoggle: {
-        color: 'black',
         backgroundColor: 'white',
-        marginTop: 100,
-        marginLeft: 20,
+        marginTop: 130,
+        marginLeft: 200, 
         paddingLeft: 10,
-        height: 50,
+        height: 40,
         position: 'absolute',
+        flexDirection: 'row',
+        alignItems: 'center',
+        borderRadius: 8,
+        paddingVertical: 10,
+        paddingHorizontal: 15,
+        borderColor: 'black',
+        borderWidth: 1,
     },
-
-    // callout: {
-    //     height: 50,
-    // }
-
-
-    //don't think you can style pins here
-    // carPin: {
-    //     pinColor: 'blue'
-    // },
-    // bicyclePin: {
-    //     pinColor: 'green'
-    // },
 });
 
 export default styles
