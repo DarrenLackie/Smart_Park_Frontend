@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Map from './components/Map/Map';
 import * as Location from 'expo-location';
 import Directions from './components/directionsattempt';
+import LocationSearch from './components/SearchBar/LocationSearch';
 
 
 export default function App() {
@@ -32,7 +33,7 @@ export default function App() {
 
           // subscribe to location updates
           Location.EventEmitter.addListener('Expo.locationChanged', (event) => {
-            console.log('New location:', event)
+            // console.log('New location:', event)
             setUserLocation(event)
           })
         } else {
@@ -53,6 +54,6 @@ export default function App() {
 
   return (
     <Map userLocation={userLocation}/>
-    // <Directions userLocation={userLocation}/>
+    // <LocationSearch userLocation={userLocation}/>
   )
 }
