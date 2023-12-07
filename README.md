@@ -4,7 +4,7 @@
 iOS App showing bicycle and car parking information for Edinburgh.
 
 ## Project Information
-For more information on the overall project please see the [overview](https://github.com/cemmartin/SmartPark).
+For more information on the overall project please see the [overview](https://github.com/darrenlackie/SmartPark).
 
 ## Description
 React Native Expo App
